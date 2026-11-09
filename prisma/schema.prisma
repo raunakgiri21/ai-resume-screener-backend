@@ -1,0 +1,35 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Analysis {
+  id                 String   @id @default(cuid())
+
+  candidateName      String
+
+  // Extracted text from uploaded documents
+  jobDescriptionText String
+  resumeText         String
+
+  // AI analysis result
+  score              Int
+  matchingSkills     String
+  skillGaps           String
+  interviewQuestions String
+  summary             String
+
+  // AI provider used: gemini or groq
+  aiProvider          String
+
+  createdAt           DateTime @default(now())
+
+  @@index([candidateName])
+  @@index([score])
+  @@index([createdAt])
+}
