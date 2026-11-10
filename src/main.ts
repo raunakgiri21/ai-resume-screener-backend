@@ -1,15 +1,11 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
-import { default as helmet } from 'helmet';
 import { AppModule } from './app.module.js';
 import { validateEnv } from './config/env.validation.js';
 
 async function bootstrap() {
   const env = validateEnv();
   const app = await NestFactory.create(AppModule);
-
-  // Add common HTTP security headers.
-  app.use(helmet());
 
   // Allow requests from the configured frontend origin(s).
   const allowedOrigins = process.env.FRONTEND_URL
