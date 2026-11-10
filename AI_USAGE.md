@@ -166,9 +166,9 @@ If either document is irrelevant, the API returns a validation error instead of 
 
 **Problem:**
 
-The application expected exactly three interview questions, but the LLM returned an empty array when the supplied documents were irrelevant.
+The application initially expected exactly three interview questions, but the LLM returned an empty array when the supplied documents were irrelevant.
 
-This caused a mismatch between the AI response and the application's expected response structure.
+This caused a schema validation failure because an empty array did not satisfy the fixed-length requirement.
 
 **Investigation and Fix:**
 
@@ -181,7 +181,7 @@ Implemented a Zod `AnalysisResultSchema` to validate:
 - Score is an integer between 0 and 100.
 - Matching skills contain no more than 5 entries.
 - Skill gaps contain no more than 3 entries.
-- Interview questions contain exactly 3 entries.
+- Interview questions contain no more than 3 entries, including an empty array when the documents are irrelevant.
 - Required fields and nested objects have the expected types.
 
 Invalid AI responses are rejected, allowing the configured fallback provider to be attempted rather than accepting malformed data.
