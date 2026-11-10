@@ -4,7 +4,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { GoogleGenAI } from '@google/genai';
-import Groq from 'groq-sdk';
+import { Groq } from 'groq-sdk';
 
 import {
   AnalysisResultSchema,
