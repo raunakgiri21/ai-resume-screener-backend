@@ -1,8 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PDFParse } from 'pdf-parse';
 import mammoth from 'mammoth';
+import { createRequire } from 'node:module';
 import { extname } from 'node:path';
 import type { UploadedFile } from './types/uploaded-file.type.js';
+
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse') as typeof import('pdf-parse');
 
 @Injectable()
 export class DocumentExtractionService {
@@ -60,14 +63,8 @@ export class DocumentExtractionService {
   }
 
   private async extractPdf(buffer: Buffer): Promise<string> {
-    const parser = new PDFParse({ data: buffer });
-
-    try {
-      const result = await parser.getText();
-      return result.text;
-    } finally {
-      await parser.destroy();
-    }
+    const result = await pdfParse(buffer);
+    return result.text;
   }
 
   private async extractDocx(buffer: Buffer): Promise<string> {
